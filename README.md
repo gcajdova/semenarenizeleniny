@@ -1,16 +1,17 @@
 # Semínka
 
-Jednoduchá, mobilně přívětivá evidence semínek zeleniny. Každý záznam patří do kategorie (např. papriky, okurky nebo cherry rajčata) a obsahuje odrůdu, výrobce, počet sáčků, rok nákupu, rok použitelnosti, umístění a poznámku.
+Mobilně přívětivá evidence sáčků semínek. Každá karta patří do jedné ze čtyř hlavních kategorií: **zelenina, bylinky, květiny nebo ovoce**. Obsahuje název/odrůdu, výrobce či dodavatele, EAN, množství v gramech nebo kusech, datum balení a expirace, fotku sáčku i pěstební plán.
 
 Aplikace je postavená na **PHP 8.2+ a MariaDB**. Je instalovatelná jako PWA, takže se z mobilního prohlížeče přidá na plochu Androidu a běží jako samostatná aplikace.
 
 ## Funkce první verze
 
 - přihlášení jedním nebo více uživateli,
-- výchozí druhy zeleniny a možnost přidat vlastní kategorii,
-- přidání, úprava, archivace a smazání záznamu,
-- vyhledávání, filtrování podle druhu a zobrazení semínek po expiraci,
-- souhrn počtu odrůd, sáčků a semínek k prověření,
+- čtyři hlavní kategorie: zelenina, bylinky, květiny a ovoce,
+- nahrání fotografie konkrétního sáčku, EAN a poznámky k výrobku,
+- plán výsevu do skleníku nebo přímo do půdy, rozestupy a období sklizně,
+- seznam sáčků k obnově při blížící se nebo proběhlé expiraci,
+- vyhledávání, filtrování, archivace a smazání záznamu,
 - responzivní rozhraní a PWA základ pro Android.
 
 ## Instalace na serveru
@@ -54,6 +55,7 @@ sudo chown -R root:www-data /var/www/seminka
 sudo find /var/www/seminka -type d -exec chmod 750 {} \;
 sudo find /var/www/seminka -type f -exec chmod 640 {} \;
 sudo chmod 750 /var/www/seminka/bin/*.php
+sudo chown -R www-data:www-data /var/www/seminka/public/uploads/seeds
 ```
 
 ### 2. První přihlášení
@@ -94,3 +96,23 @@ sudo systemctl reload apache2
 ```
 
 PWA se na Androidu nainstaluje v Chrome přes nabídku **Nainstalovat aplikaci** nebo **Přidat na plochu**. Při pozdějším vytváření APK/AAB může Android obal používat stejnou webovou aplikaci i databázi.
+
+## Expirace, fotografie a EAN
+
+Výchozí upozornění na obnovu semínek se ukáže **90 dní** před datem expirace. Počet dní lze upravit v `.env` položkou `EXPIRY_ALERT_DAYS`.
+
+Fotografie jsou omezené na JPG, PNG nebo WebP do 5 MB a ukládají se do `public/uploads/seeds/`. Tento adresář musí patřit uživateli `www-data`, jak je uvedeno výše.
+
+EAN lze napsat ručně nebo na podporovaném Androidu načíst kamerou. Tlačítko **Hledat online** otevře vyhledání kódu na webu. Kód se bezpečně uloží ke kartě sáčku; automatické doplnění parametrů výrobku není součástí aplikace, protože pro osiva není spolehlivá jednotná veřejná databáze.
+
+## Přechod z první verze
+
+Pokud už máš nainstalovanou původní skladovou verzi, před aktualizací zazálohuj databázi a po `git pull` spusť jednou tuto migraci:
+
+```bash
+sudo mariadb-dump seed_inventory > ~/seed-inventory-before-detailed-cards.sql
+cd /var/www/seminka
+sudo mariadb seed_inventory < database/migrations/001_detailed_seed_cards.sql
+sudo chown -R www-data:www-data public/uploads/seeds
+sudo -u www-data php bin/self-check.php
+```
