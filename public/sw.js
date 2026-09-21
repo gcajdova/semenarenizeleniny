@@ -1,5 +1,5 @@
-const CACHE = 'seminka-static-v1';
-const STATIC_ASSETS = ['./', 'assets/app.css', 'assets/app.js', 'assets/icon.svg', 'manifest.webmanifest'];
+const CACHE = 'seminka-static-v2';
+const STATIC_ASSETS = ['./', 'assets/app.css', 'assets/details.css', 'assets/app.js', 'assets/icon.svg', 'manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(STATIC_ASSETS)));
