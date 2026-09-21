@@ -1,0 +1,12 @@
+{
+  "name": "Semínka – Moje zahrada",
+  "short_name": "Semínka",
+  "description": "Evidence semínek zeleniny",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f0",
+  "theme_color": "#315d3a",
+  "icons": [
+    {"src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}
