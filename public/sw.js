@@ -1,4 +1,4 @@
-const CACHE = 'seminka-static-v2';
+const CACHE = 'seminka-static-v3';
 const STATIC_ASSETS = ['./', 'assets/app.css', 'assets/details.css', 'assets/app.js', 'assets/icon.svg', 'manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {

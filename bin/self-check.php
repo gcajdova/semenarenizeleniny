@@ -13,6 +13,7 @@ $checks['.env'] = is_file(APP_ROOT . '/.env');
 $checks['Databáze'] = false;
 $checks['Kategorie'] = false;
 $checks['Detailní karty'] = false;
+$checks['Výsevní kalendář'] = false;
 $checks['Fotky'] = is_dir(APP_ROOT . '/public/uploads/seeds') && is_writable(APP_ROOT . '/public/uploads/seeds');
 
 try {
@@ -20,6 +21,7 @@ try {
     $checks['Databáze'] = (bool) $pdo->query('SELECT 1')->fetchColumn();
     $checks['Kategorie'] = (int) $pdo->query('SELECT COUNT(*) FROM categories')->fetchColumn() > 0;
     $checks['Detailní karty'] = (bool) $pdo->query("SHOW COLUMNS FROM seeds LIKE 'product_name'")->fetchColumn();
+    $checks['Výsevní kalendář'] = (bool) $pdo->query("SHOW COLUMNS FROM seeds LIKE 'sowing_greenhouse_from'")->fetchColumn();
 } catch (Throwable $exception) {
     fwrite(STDERR, 'Chyba databáze: ' . $exception->getMessage() . PHP_EOL);
 }
